@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Tweet from "./Tweet";
 import NewTweet from "./NewTweet";
+import {
+    useLocation,
+    useNavigate,
+    useParams
+  } from "react-router-dom";
 
 class TweetPage extends Component {
     render() {
@@ -35,4 +40,20 @@ function mapStateToProps ( { tweets, users, authedUser }, props) {
     }
 }
 
-export default connect(mapStateToProps)(TweetPage);
+function withRouter(Component) {
+    function ComponentWithRouterProp(props) {
+      let location = useLocation();
+      let navigate = useNavigate();
+      let params = useParams();
+      return (
+        <Component
+          {...props}
+          router={{ location, navigate, params }}
+        />
+      );
+    }
+  
+    return ComponentWithRouterProp;
+}
+
+export default withRouter(connect(mapStateToProps)(TweetPage));
